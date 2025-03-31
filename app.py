@@ -13,9 +13,13 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/audio'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# Ensure data directory exists
+data_dir = os.path.join(os.path.dirname(__file__), 'data')
+os.makedirs(data_dir, exist_ok=True)
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html)
 
 @app.route('/api/process-voice', methods=['POST'])
 def process_voice():
@@ -184,4 +188,6 @@ def server_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use environment variable PORT if available (Render will set this)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
